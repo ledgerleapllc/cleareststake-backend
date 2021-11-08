@@ -7,7 +7,7 @@
 
 ### Install and Deploy
 
-Relies on Laravel PHP, and Mysql if hosting locally
+Relies on Laravel PHP, server software (Apache/Nginx), and Mysql if hosting locally
 
 ```bash
 sudo apt -y install apache2
