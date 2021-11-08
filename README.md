@@ -1,3 +1,8 @@
+<p align="center">
+	<img src="https://cleareststake.com/cleareststake.png" width="400">
+</p>
+
+
 ## Cleareststake Backend
 
 ### Install and Deploy
