@@ -59,9 +59,3 @@ sudo chown -R www-data:www-data storage/
 ```
 
 Last, you need to setup roles and admins to start using the portal and see it work. Visit the URL of the backend with the path **/install**. This will install these things for you. You will find your admin credentials generated in the Laravel log file. You may want to disable this endpoint after the initial install to prevent this install endpoint from being used again if you are planning on deploying to a production environment in the future.
-
-### Contributing
-
-Fork and create a PR if you find and want to provide improvements.
-
-For security related issues, please email thomas@ledgerleap.com
