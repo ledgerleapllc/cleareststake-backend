@@ -240,6 +240,8 @@ class AdminController extends Controller
 		if ($page_id < 1) $page_id = 1;
 		$start = ($page_id - 1) * $page_length;
 
+		$totalBalance = 0;
+
 		// Role Check
 		if ($user && $user->hasRole('admin')) { // Admin
 			$total = User::where('id', '>', 0)
