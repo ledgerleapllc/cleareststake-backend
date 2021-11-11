@@ -18,8 +18,15 @@ use Log;
 use Laravel\Passport\Token;
 use Carbon\Carbon;
 
+/**
+ * Install controller for fresh installed portals
+ */
 class InstallController extends Controller
 {
+	/**
+	 * Install first admin upon setup completion of a new portal backend
+	 * @return string
+	 */
 	public function install() {
 		// Setting Roles
 		$role = Role::where(['name' => 'admin'])->first();

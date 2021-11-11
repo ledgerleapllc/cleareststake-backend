@@ -21,9 +21,15 @@ use App\Mail\RequestWithdraw;
 
 use Carbon\Carbon;
 
+/**
+ * User specific functions
+ */
 class UserController extends Controller
 {
-	// Get GraphInfo
+	/**
+	 * Get GraphInfo
+	 * @return array
+	 */
 	public function getGraphInfo(Request $request) {
 		$user = Auth::user();
 		$graphData = [];
@@ -47,7 +53,11 @@ class UserController extends Controller
 		];
 	}
 
-	// Withdraw
+	/**
+	 * Self Withdraw
+	 * @param int amount
+	 * @return array
+	 */
 	public function withdraw(Request $request) {
 		$user = Auth::user();
 

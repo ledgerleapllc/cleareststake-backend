@@ -26,9 +26,16 @@ use Laravel\Passport\Token;
 use Carbon\Carbon;
 use Carbon\CarbonImmutable;
 
+/**
+ * Common Functions for both admins and LP users
+ */
 class CommonController extends Controller
 {
-	// Send Help Request
+	/**
+	 * Send Help Request
+	 * @param string text
+	 * @return array
+	 */
 	public function sendHelpRequest(Request $request) {
 		$user = Auth::user();
 
@@ -48,7 +55,11 @@ class CommonController extends Controller
 		return ['success' => false];
 	}
 
-	// Change Email
+	/**
+	 * Change Email
+	 * @param string email
+	 * @return array
+	 */
 	public function changeEmail(Request $request) {
 		$user = Auth::user();
 
@@ -77,7 +88,12 @@ class CommonController extends Controller
 		return ['success' => false];
 	}
 
-	// Change Password
+	/**
+	 * Change Password
+	 * @param string password
+	 * @param string new_password
+	 * @return array
+	 */
 	public function changePassword(Request $request) {
 		$user = Auth::user();
 
@@ -101,7 +117,13 @@ class CommonController extends Controller
 		return ['success' => false];
 	}
 
-	// Reset Password
+	/**
+	 * Reset Password
+	 * @param string email
+	 * @param string password
+	 * @param string token
+	 * @return array
+	 */
 	public function resetPassword(Request $request) {
 		// Validator
 		$validator = Validator::make($request->all(), [
@@ -109,77 +131,87 @@ class CommonController extends Controller
 			'password' => 'required',
 			'token' => 'required'
 		]);
+
 		if ($validator->fails()) return ['success' => false];
 		
 		$email = $request->get('email');
-    $password = $request->get('password');
-    $token = $request->get('token');
+		$password = $request->get('password');
+		$token = $request->get('token');
 
-    // Token Check
-    $temp = DB::table('password_resets')
-              ->where('email', $email)
-              ->first();
-    if (!$temp) return ['success' => false];
-    if (!Hash::check($token, $temp->token)) return ['success' => false];
+		// Token Check
+		$temp = DB::table('password_resets')
+			->where('email', $email)
+			->first();
+		if (!$temp) return ['success' => false];
+		if (!Hash::check($token, $temp->token)) return ['success' => false];
 
-    // User Check
-    $user = User::where('email', $email)->first();
-    if (!$user) {
-      return [
-        'success' => false,
-        'message' => 'Invalid user'
-      ];
-    }
+		// User Check
+		$user = User::where('email', $email)->first();
 
-    $user->password = Hash::make($password);
-    $user->save();
+		if (!$user) {
+			return [
+				'success' => false,
+				'message' => 'Invalid user'
+			];
+		}
 
-    // Clear Tokens
-    DB::table('password_resets')
-        ->where('email', $email)
-        ->delete();
+		$user->password = Hash::make($password);
+		$user->save();
 
-    return ['success' => true];
+		// Clear Tokens
+		DB::table('password_resets')
+			->where('email', $email)
+			->delete();
+
+		return ['success' => true];
 	}
 	
-	// Send Reset Email
+	/**
+	 * Send Reset Email to LP user
+	 * @param string email
+	 * @return array
+	 */
 	public function sendResetEmail(Request $request) {
 		// Validator
 		$validator = Validator::make($request->all(), [
 			'email' => 'required|email',
 		]);
+
 		if ($validator->fails()) return ['success' => false];
 
 		$email = $request->get('email');
 		$user = User::where('email', $email)->first();
-    if (!$user) {
-      return [
-        'success' => false,
-        'message' => 'Email is not valid'
-      ];
-    }
 
-    // Clear Tokens
-    DB::table('password_resets')
-        ->where('email', $email)
-        ->delete();
-    
-    // Generate New One
-    $token = Str::random(60);
-    DB::table('password_resets')->insert([
-      'email' => $email,
-      'token' => Hash::make($token),
-      'created_at' => Carbon::now()
-    ]);
-    
-    $resetUrl = $request->header('origin') . '/password/reset/' . $token . '?email=' . urlencode($email);
-    
-    Mail::to($user)->send(new ResetPasswordLink($resetUrl));
+		if (!$user) {
+			return [
+				'success' => false,
+				'message' => 'Email is not valid'
+			];
+		}
 
-    return ['success' => true];
+		// Clear Tokens
+		DB::table('password_resets')
+			->where('email', $email)
+			->delete();
+
+		// Generate New One
+		$token = Str::random(60);
+		DB::table('password_resets')->insert([
+			'email' => $email,
+			'token' => Hash::make($token),
+			'created_at' => Carbon::now()
+		]);
+
+		$resetUrl = $request->header('origin') . '/password/reset/' . $token . '?email=' . urlencode($email);
+		Mail::to($user)->send(new ResetPasswordLink($resetUrl));
+
+		return ['success' => true];
 	}
 
-	// Get Settings
+	/**
+	 * Get admin settings
+	 * @return array
+	 */
 	public function getSettings(Request $request) {
 		$settings = Helper::getSettings();
 		
@@ -189,7 +221,11 @@ class CommonController extends Controller
 		];
 	}
 
-	// Get Logs
+	/**
+	 * Get logs by user
+	 * @param int userId
+	 * @return array
+	 */
 	public function getLogs(Request $request) {
 		$logs = [];
 
@@ -227,7 +263,11 @@ class CommonController extends Controller
 		];
 	}
 
-	// Get Transaction List
+	/**
+	 * Get Transaction List
+	 * @param bool in_fund
+	 * @return array
+	 */
 	public function getTransactions(Request $request) {
 		$user = Auth::user();
 

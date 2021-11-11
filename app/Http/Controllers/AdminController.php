@@ -29,9 +29,18 @@ use Illuminate\Support\Facades\Response as FacadesResponse;
 use Maatwebsite\Excel\Excel;
 use Maatwebsite\Excel\Facades\Excel as FacadesExcel;
 
+/**
+ * Functions for admins users only
+ */
+
 class AdminController extends Controller
 {
-	// Reset User Password
+	/**
+	 * Reset User Password
+	 * @param int userId
+	 * @param string password
+	 * @return array
+	 */
 	public function resetUserPassword(Request $request) {
 		$user = Auth::user();
 
@@ -58,7 +67,12 @@ class AdminController extends Controller
 		return ['success' => false];
 	}
 
-	// Withdraw
+	/**
+	 * Withdraw from an LP user's balance
+	 * @param int userId
+	 * @param int amount
+	 * @return array
+	 */
 	public function withdraw(Request $request) {
 		$user = Auth::user();
 
@@ -94,7 +108,11 @@ class AdminController extends Controller
 		return ['success' => false];
 	}
 
-	// Update Total Balance
+	/**
+	 * Update Total Balance of all LPs
+	 * @param int balance
+	 * @return array
+	 */
 	public function updateBalance(Request $request) {
 		$user = Auth::user();
 
@@ -128,7 +146,10 @@ class AdminController extends Controller
 		return ['success' => false];
 	}
 
-	// Get Values
+	/**
+	 * Get inflation values
+	 * @return array
+	 */
 	public function getValues(Request $request) {
 		$user = Auth::user();
 		
@@ -146,7 +167,11 @@ class AdminController extends Controller
 		];
 	}
 
-	// Get Single User
+	/**
+	 * Get Single User
+	 * @param int userId
+	 * @return array
+	 */
 	public function getSingleUser($userId, Request $request) {
 		$user = Auth::user();
 
@@ -200,7 +225,10 @@ class AdminController extends Controller
 		return ['success' => false];
 	}
 
-	// Get All Users
+	/**
+	 * Get All Users
+	 * @return array
+	 */
 	public function getAllUsers(Request $request) {
 		$user = Auth::user();
 		$users = [];
@@ -215,7 +243,11 @@ class AdminController extends Controller
 		];
 	}
 
-	// Get User List
+	/**
+	 * Get User List
+	 * @param bool in_fund
+	 * @return array
+	 */
 	public function getUsers(Request $request) {
 		$user = Auth::user();
 
@@ -288,7 +320,12 @@ class AdminController extends Controller
 		];
 	}
 
-	// deposit
+	/**
+	 * Deposit to LP user's balance
+	 * @param int userId
+	 * @param int amount
+	 * @return array
+	 */
 	public function deposit(Request $request) {
 		$user = Auth::user();
 
@@ -318,6 +355,12 @@ class AdminController extends Controller
 		return ['success' => false];
 	}
 
+	/**
+	 * Update a fund user's status
+	 * @param int userId
+	 * @param bool in_fund
+	 * @return array
+	 */
 	public function updateInFundUser($userId, Request $request) {
 		$user = Auth::user();
 
@@ -359,6 +402,11 @@ class AdminController extends Controller
 		return ['success' => false];
 	}
 
+	/**
+	 * Download CSV containing LP user data/status/history
+	 * @param bool in_fund
+	 * @return array
+	 */
 	public function downloadUserCSV2(Request $request) {
 		$filename = 'export_users_' . date('Y-m-d') . '_' . date('H:i:s') . '.csv';
 	
@@ -426,6 +474,11 @@ class AdminController extends Controller
 			return FacadesExcel::download(new UsersExport($myArray), $filename);
 	}
 
+	/**
+	 * Download CSV containing transactions data
+	 * @param bool in_fund
+	 * @return array
+	 */
 	public function downloadTransactionCSV2(Request $request) {
 		$filename = 'export_transactions_' . date('Y-m-d') . '_' . date('H:i:s') . '.csv'; 
 		$sort_key = 'transactions.id';
@@ -462,6 +515,11 @@ class AdminController extends Controller
 		return FacadesExcel::download(new TransactionExport($myArray), $filename);
 	}
 
+	/**
+	 * Fund sale selloff of multiple fund users
+	 * @param array fund_sale_list
+	 * @return array
+	 */
 	public function fundSale(Request $request) {
 		$user = Auth::user();
 
@@ -495,6 +553,11 @@ class AdminController extends Controller
 		return ['success' => false];
 	}
 
+	/**
+	 * Download CSV containing user transactions data
+	 * @param int userId
+	 * @return FacadesExcel
+	 */
 	public function downloadUserTransctionCsv($userId, Request $request) {
 		$filename = 'export_user_transactions_' . date('Y-m-d') . '_' . date('H:i:s') . '.csv'; 
 		// Table Variables
@@ -534,6 +597,10 @@ class AdminController extends Controller
 		return FacadesExcel::download(new TransactionUserExport($myArray), $filename);
 	}
 
+	/**
+	 * Get the price of CSPR/USD
+	 * @return array
+	 */
 	public function getCSPRPrice(Request $request) {
 		$page_id = 1;
 		$page_length = 10;

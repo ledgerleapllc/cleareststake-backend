@@ -22,9 +22,16 @@ use App\Mail\SubInvitation;
 use Laravel\Passport\Token;
 use Carbon\Carbon;
 
+/**
+ * Common functions API for admins, users, and those with no login token.
+ */
+
 class APIController extends Controller
 {
-  // Get Auth User
+  /**
+   * Gets user global of the person logged in
+   * @return array
+   */
   public function getMe(Request $request) {
     $user = Auth::user();
     if ($user) {
@@ -39,7 +46,12 @@ class APIController extends Controller
     return ['success' => false];
   }
 
-  // User Login
+  /**
+   * User Login
+   * @param string email
+   * @param string password
+   * @return array
+   */
   public function login(Request $request) {
   	// Validator
     $validator = Validator::make($request->all(), [
@@ -101,7 +113,15 @@ class APIController extends Controller
     ];
   }
 
-  // Invite User
+  /**
+   * Admin sends invite to new LP user
+   * @param string first_name
+   * @param string last_name
+   * @param string email
+   * @param int balance
+   * @param bool in_fund
+   * @return array
+   */
   public function inviteUser(Request $request) {
     $user = Auth::user();
     if (!$user || !$user->hasRole('admin'))
@@ -170,7 +190,11 @@ class APIController extends Controller
     return ['success' => false];
   }
 
-  // Get Invitation Data from Code
+  /**
+   * Get Invitation Data from URI Code
+   * @param string code
+   * @return array
+   */
   public function getInvitationData($code, Request $request) {
     $string = Helper::b_decode($code);
     if ($string) {
@@ -208,7 +232,13 @@ class APIController extends Controller
     return ['success' => false];
   }
 
-  // Finish Invitation
+  /**
+   * Finish Invitation flow for LP users
+   * @param int userId
+   * @param string code
+   * @param string password
+   * @return array
+   */
   public function finishInvitation(Request $request) {
     $userId = (int) $request->get('userId');
     $code = $request->get('code');
