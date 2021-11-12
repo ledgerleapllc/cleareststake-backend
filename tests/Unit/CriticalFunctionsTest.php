@@ -2,153 +2,182 @@
 
 namespace Tests\Unit;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\TestCase;
 
 final class CriticalFunctionsTest extends TestCase
 {
     public function testInvitationCode(): void
     {
-        $this->get('/invitation/123');
+        $response = $this->get('/invitation/123');
+    	$response->assertStatus(200);
     }
 
     public function testInvitation(): void
     {
-        $this->get('/invitation');
+        $response = $this->get('/invitation');
+    	$response->assertStatus(200);
     }
 
     public function testLogin(): void
     {
-        $this->get('/login');
+        $response = $this->get('/login');
+    	$response->assertStatus(200);
     }
 
     public function testSendResetEmail(): void
     {
-        $this->get('/common/send-reset-email');
+        $response = $this->get('/common/send-reset-email');
+    	$response->assertStatus(200);
     }
 
     public function testResetPassword(): void
     {
-        $this->get('/common/reset-password');
+        $response = $this->get('/common/reset-password');
+    	$response->assertStatus(200);
     }
 
     public function testMe(): void
     {
-        $this->get('/me');
+        $response = $this->get('/me');
+    	$response->assertStatus(200);
     }
 
     public function testUser(): void
     {
-        $this->get('/user');
+        $response = $this->get('/user');
+    	$response->assertStatus(200);
     }
 
     public function testUserWithdraw(): void
     {
-        $this->get('/user/withdraw');
+        $response = $this->get('/user/withdraw');
+    	$response->assertStatus(200);
     }
 
     public function testUserGraphInfo(): void
     {
-        $this->get('/user/graph-info');
+        $response = $this->get('/user/graph-info');
+    	$response->assertStatus(200);
     }
 
     public function testAdminUsers(): void
     {
-        $this->get('/admin/users');
+        $response = $this->get('/admin/users');
+    	$response->assertStatus(200);
     }
 
     public function testDdminUsersAll(): void
     {
-        $this->get('/admin/users/all');
+        $response = $this->get('/admin/users/all');
+    	$response->assertStatus(200);
     }
 
     public function testAdminUser(): void
     {
-        $this->get('/admin/user/1');
+        $response = $this->get('/admin/user/1');
+    	$response->assertStatus(200);
     }
 
     public function testAdminValues(): void
     {
-        $this->get('/admin/values');
+        $response = $this->get('/admin/values');
+    	$response->assertStatus(200);
     }
 
     public function testAdminUserExportCsv(): void
     {
-        $this->get('/admin/user/1/export-csv');
+        $response = $this->get('/admin/user/1/export-csv');
+    	$response->assertStatus(200);
     }
 
     public function testAdminCsprPrice(): void
     {
-        $this->get('/admin/cspr-price');
+        $response = $this->get('/admin/cspr-price');
+    	$response->assertStatus(200);
     }
 
     public function testAdminBalance(): void
     {
-        $this->get('/admin/balance');
+        $response = $this->get('/admin/balance');
+    	$response->assertStatus(200);
     }
 
     public function testAdminWithdraw(): void
     {
-        $this->get('/admin/withdraw');
+        $response = $this->get('/admin/withdraw');
+    	$response->assertStatus(200);
     }
 
     public function testAdminDeposit(): void
     {
-        $this->get('/admin/deposit');
+        $response = $this->get('/admin/deposit');
+    	$response->assertStatus(200);
     }
 
     public function testAdminUserFund(): void
     {
-        $this->get('/admin/user/1/fund');
+        $response = $this->get('/admin/user/1/fund');
+    	$response->assertStatus(200);
     }
 
     public function testAdminResetUserAassword(): void
     {
-        $this->get('/admin/reset-user-password');
+        $response = $this->get('/admin/reset-user-password');
+    	$response->assertStatus(200);
     }
 
     public function testAdminUsersExportCsv(): void
     {
-        $this->get('/admin/users/export-csv');
+        $response = $this->get('/admin/users/export-csv');
+    	$response->assertStatus(200);
     }
 
     public function testAdminFundSale(): void
     {
-        $this->get('/admin/fund-sale');
+        $response = $this->get('/admin/fund-sale');
+    	$response->assertStatus(200);
     }
 
     public function testCommonSettings(): void
     {
-        $this->get('/common/settings');
+        $response = $this->get('/common/settings');
+    	$response->assertStatus(200);
     }
 
     public function testCommonTransactions(): void
     {
-        $this->get('/common/transactions');
+        $response = $this->get('/common/transactions');
+    	$response->assertStatus(200);
     }
 
     public function testCommonLogs(): void
     {
-        $this->get('/common/logs');
+        $response = $this->get('/common/logs');
+    	$response->assertStatus(200);
     }
 
     public function testCommonSendHelpRequest(): void
     {
-        $this->get('/common/send-help-request');
+        $response = $this->get('/common/send-help-request');
+    	$response->assertStatus(200);
     }
 
     public function testCommonChangeEmail(): void
     {
-        $this->get('/common/change-email');
+        $response = $this->get('/common/change-email');
+    	$response->assertStatus(200);
     }
 
     public function testCommonChangePassword(): void
     {
-        $this->get('/common/change-password');
+        $response = $this->get('/common/change-password');
+    	$response->assertStatus(200);
     }
 
     public function testCommonTransactionsExportCsv(): void
     {
-        $this->get('/common/transactions/export-csv');
+        $response = $this->get('/common/transactions/export-csv');
+    	$response->assertStatus(200);
     }
-
 }
