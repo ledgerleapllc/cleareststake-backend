@@ -35,8 +35,8 @@ final class CriticalFunctionsTest extends TestCase
 
     public function testresetUserPassword(): void
     {
-        $hash = Hash::make('password');
-        echo $hash;
+        // $hash = Hash::make('password');
+        // echo $hash;
     }
 }
 
