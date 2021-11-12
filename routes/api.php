@@ -18,7 +18,7 @@ Route::get('/invitation/{code}', 'APIController@getInvitationData');
 
 Route::put('/invitation', 'APIController@finishInvitation');
 
-Route::post('/login', 'APIController@login');
+Route::post('/login', 'APIController@login')->name('login');
 Route::post('/common/send-reset-email', 'CommonController@sendResetEmail');
 Route::post('/common/reset-password', 'CommonController@resetPassword');
 
