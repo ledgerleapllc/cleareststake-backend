@@ -67,7 +67,7 @@ final class CriticalFunctionsTest extends TestCase
         $response->assertStatus(302);
     }
 
-    public function testDdminUsersAll(): void
+    public function testAdminUsersAll(): void
     {
         $response = $this->get('/api/admin/users/all');
         $response->assertStatus(302);
