@@ -35,7 +35,6 @@ final class CriticalFunctionsTest extends TestCase
 
     public function testresetUserPassword(): void
     {
-        $app = require __DIR__.'/../../bootstrap/app.php';
         $hash = Hash::make('password');
         echo $hash;
     }
