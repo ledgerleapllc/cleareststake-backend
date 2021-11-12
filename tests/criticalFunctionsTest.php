@@ -1,8 +1,11 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
+namespace Tests;
 
-final class criticalFunctionsTest extends TestCase
+use PHPUnit\Framework\TestCase;
+use Illuminate\Support\Facades\Hash;
+
+final class CriticalFunctionsTest extends TestCase
 {
     // public function testCanBeCreatedFromValidEmailAddress(): void
     // {
@@ -30,9 +33,10 @@ final class criticalFunctionsTest extends TestCase
 
 
 
-    public function resetUserPasswordTest(): void
+    public function testresetUserPassword(): void
     {
-        $hash = Hash::make($password);
+        $hash = Hash::make('password');
+        echo $hash;
     }
 }
 

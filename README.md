@@ -102,5 +102,5 @@ These features were scoped and determined to be the essential features needed fo
 We use PHPUnit for unit testing of the portal's critical functionality. In order to run the test suite, you will need to build composer dependancies and run PHP Artisan's commands, ensuring a proper backend build. Run **composer run-script --dev unit-tests** to run the unit tests and see output on th CLI.
 
 ```bash
-composer run-script --dev unit-tests
+composer run-script --dev test
 ```
