@@ -17,4 +17,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::post('/login', 'APIController@login');
+
 Route::get('/install', 'InstallController@install');
