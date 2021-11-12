@@ -148,11 +148,11 @@ class Helper {
 
 	// Generate Random String
 	public static function generateRandomString($length_of_string) {
-    // String of all alphanumeric character
-    $str_result = '123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ'; 
-  	
-    // Shufle the $str_result and returns substring
-    return substr(str_shuffle($str_result), 0, $length_of_string); 
+		// String of all alphanumeric character
+		$str_result = '123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ'; 
+
+		// Shufle the $str_result and returns substring
+		return substr(str_shuffle($str_result), 0, $length_of_string); 
 	}
 
 	// Generate Random Two FA Code
