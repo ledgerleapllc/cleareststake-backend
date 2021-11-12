@@ -3,7 +3,6 @@
 namespace Tests;
 
 use PHPUnit\Framework\TestCase;
-use Illuminate\Support\Facades\Hash;
 
 final class CriticalFunctionsTest extends TestCase
 {
@@ -35,8 +34,7 @@ final class CriticalFunctionsTest extends TestCase
 
     public function testresetUserPassword(): void
     {
-        // $hash = Hash::make('password');
-        // echo $hash;
+        $this->assertEquals(1,1);
     }
 }
 
