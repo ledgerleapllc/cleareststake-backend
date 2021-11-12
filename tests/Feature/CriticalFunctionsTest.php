@@ -15,25 +15,25 @@ final class CriticalFunctionsTest extends TestCase
 
     public function testInvitation(): void
     {
-        $response = $this->get('/api/invitation');
+        $response = $this->put('/api/invitation');
     	$response->assertStatus(200);
     }
 
     public function testLogin(): void
     {
-        $response = $this->get('/api/login');
+        $response = $this->post('/api/login');
     	$response->assertStatus(200);
     }
 
     public function testSendResetEmail(): void
     {
-        $response = $this->get('/api/common/send-reset-email');
+        $response = $this->post('/api/common/send-reset-email');
     	$response->assertStatus(200);
     }
 
     public function testResetPassword(): void
     {
-        $response = $this->get('/api/common/reset-password');
+        $response = $this->post('/api/common/reset-password');
     	$response->assertStatus(200);
     }
 
@@ -45,13 +45,13 @@ final class CriticalFunctionsTest extends TestCase
 
     public function testUser(): void
     {
-        $response = $this->get('/api/user');
+        $response = $this->post('/api/user');
     	$response->assertStatus(200);
     }
 
     public function testUserWithdraw(): void
     {
-        $response = $this->get('/api/user/withdraw');
+        $response = $this->put('/api/user/withdraw');
     	$response->assertStatus(200);
     }
 
@@ -99,31 +99,31 @@ final class CriticalFunctionsTest extends TestCase
 
     public function testAdminBalance(): void
     {
-        $response = $this->get('/api/admin/balance');
+        $response = $this->put('/api/admin/balance');
     	$response->assertStatus(200);
     }
 
     public function testAdminWithdraw(): void
     {
-        $response = $this->get('/api/admin/withdraw');
+        $response = $this->put('/api/admin/withdraw');
     	$response->assertStatus(200);
     }
 
     public function testAdminDeposit(): void
     {
-        $response = $this->get('/api/admin/deposit');
+        $response = $this->put('/api/admin/deposit');
     	$response->assertStatus(200);
     }
 
     public function testAdminUserFund(): void
     {
-        $response = $this->get('/api/admin/user/1/fund');
+        $response = $this->put('/api/admin/user/1/fund');
     	$response->assertStatus(200);
     }
 
-    public function testAdminResetUserAassword(): void
+    public function testAdminResetUserPassword(): void
     {
-        $response = $this->get('/api/admin/reset-user-password');
+        $response = $this->post('/api/admin/reset-user-password');
     	$response->assertStatus(200);
     }
 
@@ -135,7 +135,7 @@ final class CriticalFunctionsTest extends TestCase
 
     public function testAdminFundSale(): void
     {
-        $response = $this->get('/api/admin/fund-sale');
+        $response = $this->post('/api/admin/fund-sale');
     	$response->assertStatus(200);
     }
 
@@ -159,19 +159,19 @@ final class CriticalFunctionsTest extends TestCase
 
     public function testCommonSendHelpRequest(): void
     {
-        $response = $this->get('/api/common/send-help-request');
+        $response = $this->post('/api/common/send-help-request');
     	$response->assertStatus(200);
     }
 
     public function testCommonChangeEmail(): void
     {
-        $response = $this->get('/api/common/change-email');
+        $response = $this->post('/api/common/change-email');
     	$response->assertStatus(200);
     }
 
     public function testCommonChangePassword(): void
     {
-        $response = $this->get('/api/common/change-password');
+        $response = $this->post('/api/common/change-password');
     	$response->assertStatus(200);
     }
 
