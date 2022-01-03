@@ -85,12 +85,14 @@ class APIController extends Controller
       ];
     }
 
+    /*
     if (!$user->email_verified) {
       return [
         'success' => false,
         'message' => 'Email is not verified'
       ];
     }
+    */
 
     // Log Table
     $log = new Log;
@@ -109,7 +111,8 @@ class APIController extends Controller
 
     return [
       'success' => true,
-      'user' => $user
+      'user' => $user,
+      'message' => 'Password has been reset'
     ];
   }
 
