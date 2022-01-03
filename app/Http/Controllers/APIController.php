@@ -111,8 +111,7 @@ class APIController extends Controller
 
     return [
       'success' => true,
-      'user' => $user,
-      'message' => 'Password has been reset'
+      'user' => $user
     ];
   }
 

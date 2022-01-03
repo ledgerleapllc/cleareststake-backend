@@ -60,7 +60,10 @@ class AdminController extends Controller
 				$user->password = Hash::make($password);
 				$user->save();
 
-				return ['success' => true];
+				return [
+					'success' => true, 
+					'message' => 'Password has been reset'
+				];
 			}
 		}
 
