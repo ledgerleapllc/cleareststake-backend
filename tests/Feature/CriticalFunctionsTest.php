@@ -7,177 +7,144 @@ use Tests\TestCase;
 
 final class CriticalFunctionsTest extends TestCase
 {
-    public function testInvitationCode(): void
-    {
-        $response = $this->get('/api/invitation/123');
-        $response->assertStatus(200);
+    public function testLogin() {
+        $user = [
+            'email' => 'demo@devxdao.com',
+            'password' => 'AdminTest',
+        ];
+
+        $response = $this->withHeaders([
+            'Accept' => 'application/json',
+        ])->json('post', '/api/login', $user);
+
+        $response->assertStatus(200)
+                    ->assertJsonStructure([
+                        'success',
+                        'user',
+                    ]);
     }
 
-    public function testInvitation(): void
-    {
-        $response = $this->put('/api/invitation');
-        $response->assertStatus(200);
+    public function testInviteUser() {
+        $token = $this->getToken();
+
+        $user = [
+            'first_name' => 'Test',
+            'last_name' => 'User',
+            'email' => 'demouser@devxdao.com',
+            'balance' => 1000,
+            'in_fund' => 1,
+        ];
+
+        $response = $this->withHeaders([
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $token,
+        ])->json('post', '/api/user', $user);
+
+        $response->assertStatus(200)
+                    ->assertJsonStructure([
+                        'success',
+                    ]);
     }
 
-    public function testLogin(): void
-    {
-        $response = $this->post('/api/login');
-        $response->assertStatus(200);
+    public function testGetMe() {
+        $token = $this->getToken();
+
+        $response = $this->withHeaders([
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $token,
+        ])->json('get', '/api/me');
+
+        $response->assertStatus(200)
+                    ->assertJsonStructure([
+                        'success',
+                        'me',
+                    ]);
     }
 
-    public function testSendResetEmail(): void
-    {
-        $response = $this->post('/api/common/send-reset-email');
-        $response->assertStatus(200);
+    public function testSendResetEmail() {
+        $token = $this->getToken();
+        $user = $this->addUser();
+
+        $response = $this->withHeaders([
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $token,
+        ])->json('post', '/api/common/send-reset-email', [
+            'email' => $user->email
+        ]);
+
+        $response->assertStatus(200)
+                    ->assertJsonStructure([
+                        'success',
+                    ]);
     }
 
-    public function testResetPassword(): void
-    {
-        $response = $this->post('/api/common/reset-password');
-        $response->assertStatus(200);
+    public function testUserWithdraw() {
+        $this->addUser();
+        $token = $this->getUserToken();
+
+        $response = $this->withHeaders([
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $token,
+        ])->json('put', '/api/user/withdraw', [
+            'amount' => 100
+        ]);
+
+        $response->assertStatus(200)
+                    ->assertJsonStructure([
+                        'success',
+                    ]);
     }
 
-    public function testMe(): void
-    {
-        $response = $this->get('/api/me');
-        $response->assertStatus(302);
+    public function testUserGraphInfo() {
+        $this->addUser();
+        $token = $this->getUserToken();
+
+        $response = $this->withHeaders([
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $token,
+        ])->json('get', '/api/user/graph-info');
+
+        $response->assertStatus(200)
+                    ->assertJsonStructure([
+                        'success',
+                    ]);
     }
 
-    public function testUser(): void
-    {
-        $response = $this->post('/api/user');
-        $response->assertStatus(302);
-    }
+    public function testAdminUsers() {
+        $token = $this->getToken();
 
-    public function testUserWithdraw(): void
-    {
-        $response = $this->put('/api/user/withdraw');
-        $response->assertStatus(302);
-    }
+        $response = $this->withHeaders([
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $token,
+        ])->json('get', '/api/admin/users');
 
-    public function testUserGraphInfo(): void
-    {
-        $response = $this->get('/api/user/graph-info');
-        $response->assertStatus(302);
-    }
+        // $apiResponse = $response->baseResponse->getData();
+        
+        $response->assertStatus(200)
+                    ->assertJsonStructure([
+                        'success',
+                        'total',
+                        'users',
+                        'total_balance',
+                    ]);
+    }  
 
-    public function testAdminUsers(): void
-    {
-        $response = $this->get('/api/admin/users');
-        $response->assertStatus(302);
-    }
+    public function testAdminAllUsers() {
+        $token = $this->getToken();
 
-    public function testAdminUsersAll(): void
-    {
-        $response = $this->get('/api/admin/users/all');
-        $response->assertStatus(302);
-    }
+        $response = $this->withHeaders([
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $token,
+        ])->json('get', '/api/admin/users/all');
 
-    public function testAdminUser(): void
-    {
-        $response = $this->get('/api/admin/user/1');
-        $response->assertStatus(302);
-    }
+        // $apiResponse = $response->baseResponse->getData();
+        
+        $response->assertStatus(200)
+                    ->assertJsonStructure([
+                        'success',
+                        'users',
+                    ]);
+    }  
 
-    public function testAdminValues(): void
-    {
-        $response = $this->get('/api/admin/values');
-        $response->assertStatus(302);
-    }
-
-    public function testAdminUserExportCsv(): void
-    {
-        $response = $this->get('/api/admin/user/1/export-csv');
-        $response->assertStatus(302);
-    }
-
-    public function testAdminCsprPrice(): void
-    {
-        $response = $this->get('/api/admin/cspr-price');
-        $response->assertStatus(302);
-    }
-
-    public function testAdminBalance(): void
-    {
-        $response = $this->put('/api/admin/balance');
-        $response->assertStatus(302);
-    }
-
-    public function testAdminWithdraw(): void
-    {
-        $response = $this->put('/api/admin/withdraw');
-        $response->assertStatus(302);
-    }
-
-    public function testAdminDeposit(): void
-    {
-        $response = $this->put('/api/admin/deposit');
-        $response->assertStatus(302);
-    }
-
-    public function testAdminUserFund(): void
-    {
-        $response = $this->put('/api/admin/user/1/fund');
-        $response->assertStatus(302);
-    }
-
-    public function testAdminResetUserPassword(): void
-    {
-        $response = $this->post('/api/admin/reset-user-password');
-        $response->assertStatus(302);
-    }
-
-    public function testAdminUsersExportCsv(): void
-    {
-        $response = $this->get('/api/admin/users/export-csv');
-        $response->assertStatus(302);
-    }
-
-    public function testAdminFundSale(): void
-    {
-        $response = $this->post('/api/admin/fund-sale');
-        $response->assertStatus(302);
-    }
-
-    public function testCommonSettings(): void
-    {
-        $response = $this->get('/api/common/settings');
-        $response->assertStatus(302);
-    }
-
-    public function testCommonTransactions(): void
-    {
-        $response = $this->get('/api/common/transactions');
-        $response->assertStatus(302);
-    }
-
-    public function testCommonLogs(): void
-    {
-        $response = $this->get('/api/common/logs');
-        $response->assertStatus(302);
-    }
-
-    public function testCommonSendHelpRequest(): void
-    {
-        $response = $this->post('/api/common/send-help-request');
-        $response->assertStatus(302);
-    }
-
-    public function testCommonChangeEmail(): void
-    {
-        $response = $this->post('/api/common/change-email');
-        $response->assertStatus(302);
-    }
-
-    public function testCommonChangePassword(): void
-    {
-        $response = $this->post('/api/common/change-password');
-        $response->assertStatus(302);
-    }
-
-    public function testCommonTransactionsExportCsv(): void
-    {
-        $response = $this->get('/api/common/transactions/export-csv');
-        $response->assertStatus(302);
-    }
+    
 }
