@@ -14,7 +14,7 @@ class UpdateUserTable extends Migration
     public function up()
     {
         Schema::table('users', function ($table) {
-            $table->string('role');
+            $table->string('role')->nullable();
             $table->double('inflation', 8, 2)->nullable();
             $table->double('balance', 8, 2)->nullable();
         });
