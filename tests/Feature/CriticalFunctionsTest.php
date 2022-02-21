@@ -61,6 +61,44 @@ final class CriticalFunctionsTest extends TestCase
                     ]);
     }
 
+    public function testSendHelpRequest() {
+        $token = $this->getToken();
+        $user = $this->addUser();
+
+        $response = $this->withHeaders([
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $token,
+        ])->json('post', '/api/common/send-help-request', [
+            'text' => 'Email Content Here'
+        ]);
+
+        $response->assertStatus(200)
+                    ->assertJsonStructure([
+                        'success',
+                    ]);
+    }
+
+    public function testSendHelpRequestNegative() {
+        $token = $this->getToken();
+        $user = $this->addUser();
+
+        $response = $this->withHeaders([
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $token,
+        ])->json('post', '/api/common/send-help-request');
+
+        $apiResponse = $response->baseResponse->getData();
+
+        $response->assertStatus(200)
+                    ->assertJsonStructure([
+                        'success',
+                        'message'
+                    ])
+                    ->assertJson([
+                        'success' => false,
+                    ]);
+    }
+
     public function testSendResetEmail() {
         $token = $this->getToken();
         $user = $this->addUser();
@@ -70,6 +108,23 @@ final class CriticalFunctionsTest extends TestCase
             'Authorization' => 'Bearer ' . $token,
         ])->json('post', '/api/common/send-reset-email', [
             'email' => $user->email
+        ]);
+
+        $response->assertStatus(200)
+                    ->assertJsonStructure([
+                        'success',
+                    ]);
+    }
+
+    public function testAdminWithdraw() {
+        $this->addAdmin();
+        $token = $this->getAdminToken();
+
+        $response = $this->withHeaders([
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $token,
+        ])->json('put', '/api/admin/withdraw', [
+            'amount' => 100
         ]);
 
         $response->assertStatus(200)
@@ -127,7 +182,7 @@ final class CriticalFunctionsTest extends TestCase
                         'users',
                         'total_balance',
                     ]);
-    }  
+    }
 
     public function testAdminAllUsers() {
         $token = $this->getToken();
@@ -144,7 +199,5 @@ final class CriticalFunctionsTest extends TestCase
                         'success',
                         'users',
                     ]);
-    }  
-
-    
+    }
 }

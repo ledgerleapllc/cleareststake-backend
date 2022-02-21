@@ -52,7 +52,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:api']], function() {
 	Route::put('/withdraw', 'AdminController@withdraw');
 	Route::put('/deposit', 'AdminController@deposit');
 	Route::put('/user/{userId}/fund', 'AdminController@updateInFundUser');
-
+	
 	// POST
 	Route::post('/reset-user-password', 'AdminController@resetUserPassword');
 	Route::get('/users/export-csv', 'AdminController@downloadUserCSV2');

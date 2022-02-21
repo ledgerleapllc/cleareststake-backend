@@ -48,6 +48,31 @@ class CommonController extends Controller
 				];
 			}
 
+			// ENV Check
+			$envMailer = env('MAIL_MAILER');
+			$envHost = env('MAIL_HOST');
+			$envPort = env('MAIL_PORT');
+			$envUsername = env('MAIL_USERNAME');
+			$envPassword = env('MAIL_PASSWORD');
+			$envEncryption = env('MAIL_ENCRYPTION');
+			$envAddress = env('MAIL_FROM_ADDRESS');
+			$envName = env('MAIL_FROM_NAME');
+			if (
+				!$envMailer ||
+				!$envHost ||
+				!$envPort ||
+				!$envUsername ||
+				!$envPassword ||
+				!$envEncryption ||
+				!$envAddress ||
+				!$envName
+			) {
+				return [
+					'success' => false,
+					'message' => 'We cannot send email, please try again later'
+				];
+			}
+
 			Mail::to(env('ADMIN_EMAIL'))->send(new HelpRequest($user->email, $text));
 			return ['success' => true];
 		}
@@ -201,6 +226,31 @@ class CommonController extends Controller
 			'token' => Hash::make($token),
 			'created_at' => Carbon::now()
 		]);
+
+		// ENV Check
+		$envMailer = env('MAIL_MAILER');
+		$envHost = env('MAIL_HOST');
+		$envPort = env('MAIL_PORT');
+		$envUsername = env('MAIL_USERNAME');
+		$envPassword = env('MAIL_PASSWORD');
+		$envEncryption = env('MAIL_ENCRYPTION');
+		$envAddress = env('MAIL_FROM_ADDRESS');
+		$envName = env('MAIL_FROM_NAME');
+		if (
+			!$envMailer ||
+			!$envHost ||
+			!$envPort ||
+			!$envUsername ||
+			!$envPassword ||
+			!$envEncryption ||
+			!$envAddress ||
+			!$envName
+		) {
+			return [
+				'success' => false,
+				'message' => 'We cannot send email, please try again later'
+			];
+		}
 
 		$resetUrl = $request->header('origin') . '/password/reset/' . $token . '?email=' . urlencode($email);
 		Mail::to($user)->send(new ResetPasswordLink($resetUrl));

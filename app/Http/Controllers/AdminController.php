@@ -98,11 +98,11 @@ class AdminController extends Controller
 					Helper::updateSetting('last_withdraw_date', Carbon::now());
 
 					Helper::addTransaction([
-		        'user_id' => $user->id,
-		        'amount' => -$amount,
-		        'action' => 'Withdraw Processed',
-		        'balance' => $user->balance,
-		      ]);
+				        'user_id' => $user->id,
+				        'amount' => -$amount,
+				        'action' => 'Withdraw Processed',
+				        'balance' => $user->balance,
+				    ]);
 					return ['success' => true];
 				}
 			}
@@ -280,25 +280,25 @@ class AdminController extends Controller
 		// Role Check
 		if ($user && $user->hasRole('admin')) { // Admin
 			$total = User::where('id', '>', 0)
-										->where('role', '!=', 'admin')
-										->where(function ($query) use ($inFund) {
-											if (!is_null($inFund)) {
-												$query->where('in_fund', '=', $inFund);
-											}
-										})
-										->get()
-										->count();
+							->where('role', '!=', 'admin')
+							->where(function ($query) use ($inFund) {
+								if (!is_null($inFund)) {
+									$query->where('in_fund', '=', $inFund);
+								}
+							})
+							->get()
+							->count();
 			$users = User::where('id', '>', 0)
-										->where('role', '!=', 'admin')
-										->where(function ($query) use ($inFund) {
-											if (!is_null($inFund)) {
-												$query->where('in_fund', '=', $inFund);
-											}
-										})
-										->orderBy($sort_key, $sort_direction)
-										->offset($start)
-										->limit($page_length)
-										->get();
+							->where('role', '!=', 'admin')
+							->where(function ($query) use ($inFund) {
+								if (!is_null($inFund)) {
+									$query->where('in_fund', '=', $inFund);
+								}
+							})
+							->orderBy($sort_key, $sort_direction)
+							->offset($start)
+							->limit($page_length)
+							->get();
 			foreach ($users as $user) {
 				$totalInflation = Transaction::where('action', 'Inflation Deposit')
 					->where('user_id', $user->id)->get()->sum('amount');
@@ -312,7 +312,8 @@ class AdminController extends Controller
 					if (!is_null($inFund)) {
 						$query->where('in_fund', '=', $inFund);
 					}
-				})->sum('balance');
+				})
+				->sum('balance');
 		}
 
 		return [
