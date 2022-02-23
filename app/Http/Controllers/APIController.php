@@ -181,8 +181,32 @@ class APIController extends Controller
         'balance' => $user->balance,
       ]);
 
+      // ENV Check
+      $envMailer = env('MAIL_MAILER');
+      $envHost = env('MAIL_HOST');
+      $envPort = env('MAIL_PORT');
+      $envUsername = env('MAIL_USERNAME');
+      $envPassword = env('MAIL_PASSWORD');
+      $envEncryption = env('MAIL_ENCRYPTION');
+      $envAddress = env('MAIL_FROM_ADDRESS');
+      $envName = env('MAIL_FROM_NAME');
+      if (
+        !$envMailer ||
+        !$envHost ||
+        !$envPort ||
+        !$envUsername ||
+        !$envPassword ||
+        !$envEncryption ||
+        !$envAddress ||
+        !$envName
+      ) {
+        return [
+          'success' => false,
+          'message' => 'We cannot send email, please try again later'
+        ];
+      }
+        
       $link = $request->header('origin') . '/invitation/' . Helper::b_encode($user->id . '::' . $email . '::' . $code);
-
       $title = "Casper Portal Invitation";
       Mail::to($user)->send(new SubInvitation($link, $first_name, $title));
 

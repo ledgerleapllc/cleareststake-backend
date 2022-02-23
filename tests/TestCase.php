@@ -82,7 +82,49 @@ abstract class TestCase extends BaseTestCase
         $token = $apiResponse->user->accessTokenAPI;
         
         return $token;
-    }   
+    }
+
+    public function getAdminToken() {
+        $user = [
+            'email' => 'demoadmin@devxdao.com',
+            'password' => 'AdminTest',
+        ];
+
+        $response = $this->withHeaders([
+            'Accept' => 'application/json',
+        ])->json('post', '/api/login', $user);
+
+        $apiResponse = $response->baseResponse->getData();
+        $token = $apiResponse->user->accessTokenAPI;
+        
+        return $token;
+    }
+
+    public function addAdmin() {
+        $admin = new User;
+        $admin->first_name = 'Test';
+        $admin->last_name = 'Admin';
+        $admin->email = 'demoadmin@devxdao.com';
+        $admin->role = 'admin';
+        $admin->password = Hash::make('AdminTest');
+        $admin->balance = 1000;
+        $admin->confirmation_code = 'TestCode';
+        $admin->in_fund = 1;
+        $admin->email_verified = 1;
+        $admin->email_verified_at = Date::now();
+        $admin->save();
+        $admin->assignRole('admin');
+
+        Helper::addBalance((int) $admin->balance, $admin->in_fund);
+        Helper::addTransaction([
+            'user_id' => $admin->id,
+            'amount' => $admin->balance,
+            'action' => 'Initial Balance',
+            'balance' => $admin->balance,
+        ]);
+
+        return $admin;
+    }
 
     public function addUser() {
         $user = new User;
