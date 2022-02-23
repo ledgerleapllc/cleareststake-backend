@@ -13,7 +13,7 @@ Relies on Laravel PHP. You can find Laravel's documentation here https://github.
 
 ### Install and Deploy
 
-Also relies on server software (Apache/Nginx) and Mysql if hosting locally.
+Also relies on server software (Apache/Nginx) and Mysql if hosting locally. Amazon ec2 t2 medium Ubuntu is used for all deployment testing.
 
 ```bash
 sudo apt -y install apache2
@@ -46,7 +46,9 @@ composer update
 cp .env.example .env
 ```
 
-After adjusting .env with your variables, run Artisan to finish setup
+If you are using an RDS or external database for your data, then you can specify the host, port, etc in the .env. Otherwise you will need to create a local Mysql database and create an empty database with the same name as named in .env.
+
+After adjusting .env with all your variables, run Artisan to finish setup
 
 ```bash
 php artisan key:generate
