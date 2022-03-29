@@ -46,7 +46,7 @@ class Helper {
 			$settings['token_price'] = (float) $tokenPrice->price;
 		else
 			$settings['token_price'] = 0;
-
+		
 		$totalBalance = User::where('id', '>', 0)
 			->where('role', '!=', 'admin')
 			->sum('balance');
