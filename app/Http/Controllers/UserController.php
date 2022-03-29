@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
+
 use Spatie\Permission\Models\Role;
 
 use App\Http\Helper;
@@ -73,16 +74,7 @@ class UserController extends Controller
 				$envEncryption = env('MAIL_ENCRYPTION');
 				$envAddress = env('MAIL_FROM_ADDRESS');
 				$envName = env('MAIL_FROM_NAME');
-				if (
-					!$envMailer ||
-					!$envHost ||
-					!$envPort ||
-					!$envUsername ||
-					!$envPassword ||
-					!$envEncryption ||
-					!$envAddress ||
-					!$envName
-				) {
+				if (!$envMailer || !$envHost || !$envPort || !$envUsername || !$envPassword || !$envEncryption || !$envAddress || !$envName) {
 					return [
 						'success' => false,
 						'message' => 'We cannot send email, please try again later'

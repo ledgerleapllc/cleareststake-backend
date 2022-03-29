@@ -344,19 +344,19 @@ class CommonController extends Controller
 		// Role Check
 		if ($user && $user->hasRole('admin')) {
 			$total = Transaction::has('user')
-													->get()
-													->count();
+								->get()
+								->count();
 			$transactions = Transaction::with('user')->join('users', 'transactions.user_id', '=', 'users.id')
-																	->where(function ($query) use ($inFund) {
-																		if (!is_null($inFund)) {
-																			$query->where('users.in_fund', '=', $inFund);
-																		}
-																	})->select(['transactions.*'])
-																	->has('user')
-																	->orderBy($sort_key, $sort_direction)
-																	->offset($start)
-																	->limit($page_length)
-																	->get();
+										->where(function ($query) use ($inFund) {
+											if (!is_null($inFund)) {
+												$query->where('users.in_fund', '=', $inFund);
+											}
+										})->select(['transactions.*'])
+										->has('user')
+										->orderBy($sort_key, $sort_direction)
+										->offset($start)
+										->limit($page_length)
+										->get();
 			$settings = Helper::getSettings();
 			$tokenPrice = $settings['token_price'];
 			foreach ($transactions as $trans) {
@@ -368,15 +368,15 @@ class CommonController extends Controller
 			}
 		} else {
 			$total = Transaction::has('user')
-													->where('user_id', $user->id)
-													->get()
-													->count();
+								->where('user_id', $user->id)
+								->get()
+								->count();
 			$transactions = Transaction::has('user')
-																	->where('user_id', $user->id)
-																	->orderBy($sort_key, $sort_direction)
-																	->offset($start)
-																	->limit($page_length)
-																	->get();
+										->where('user_id', $user->id)
+										->orderBy($sort_key, $sort_direction)
+										->offset($start)
+										->limit($page_length)
+										->get();
 		}
 
 		return [

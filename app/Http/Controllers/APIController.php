@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
+
 use Spatie\Permission\Models\Role;
 
 use App\Http\Helper;
@@ -36,13 +38,11 @@ class APIController extends Controller
     $user = Auth::user();
     if ($user) {
       $user = User::where('id', $user->id)->first();
-
       return [
         'success' => true,
         'me' => $user
       ];
     }
-
     return ['success' => false];
   }
 
@@ -126,8 +126,9 @@ class APIController extends Controller
    */
   public function inviteUser(Request $request) {
     $user = Auth::user();
-    if (!$user || !$user->hasRole('admin'))
+    if (!$user || !$user->hasRole('admin')) {
       return ['success' => false];
+    }
 
     // Validator
     $validator = Validator::make($request->all(), [
@@ -233,11 +234,7 @@ class APIController extends Controller
       if ($id && $email && $code) {
         $user = User::find($id);
 
-        if (
-          $user &&
-          $user->email == $email &&
-          $user->confirmation_code == $code
-        ) {
+        if ($user && $user->email == $email && $user->confirmation_code == $code) {
           if (!$user->password) {
             return [
               'success' => true,
@@ -305,6 +302,7 @@ class APIController extends Controller
             'user_id' => $user->id,
             'name' => 'API Access Token'
           ])->delete();
+
           $tokenResult = $user->createToken('API Access Token');
 
           $user->accessTokenAPI = $tokenResult->accessToken;

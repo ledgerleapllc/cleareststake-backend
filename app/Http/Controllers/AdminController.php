@@ -5,6 +5,12 @@ namespace App\Http\Controllers;
 use App\Exports\TransactionExport;
 use App\Exports\TransactionUserExport;
 use App\Exports\UsersExport;
+use App\Http\Helper;
+use App\Mail\SubInvitation;
+use App\User;
+use App\Transaction;
+use App\TokenPrice;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -13,19 +19,15 @@ use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
-use Spatie\Permission\Models\Role;
-
-use App\Http\Helper;
-
-use App\User;
-use App\Transaction;
-
-use App\Mail\SubInvitation;
-use App\TokenPrice;
-use Laravel\Passport\Token;
-use Carbon\Carbon;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Response as FacadesResponse;
+
+use Spatie\Permission\Models\Role;
+
+use Laravel\Passport\Token;
+
+use Carbon\Carbon;
+
 use Maatwebsite\Excel\Excel;
 use Maatwebsite\Excel\Facades\Excel as FacadesExcel;
 
@@ -126,8 +128,11 @@ class AdminController extends Controller
 				$settings = Helper::getSettings();
 				
 				$current_balance = 0;
-				if ($settings && isset($settings['total_balance']))
+				if ($settings && isset($settings['real_total_balance'])) {
+					$current_balance = (int) $settings['real_total_balance'];
+				} else if ($settings && isset($settings['total_balance'])) {
 					$current_balance = (int) $settings['total_balance'];
+				}
 				
 				if ($current_balance <= 0) {
 					return [
@@ -136,10 +141,19 @@ class AdminController extends Controller
 					];
 				}
 
-				$rate = (float) ($balance / $current_balance);
+				if ($balance <= $current_balance) {
+					return [
+						'success' => false,
+						'message' => 'New balance should be greater than current balance',
+					];
+				}
 
+				$rate = (float) ($balance / $current_balance);
+				$diff = $balance - $current_balance;
+				
 				Helper::updateBalance($balance);
-				Helper::updateUsersBalance($rate);
+				// Helper::updateUsersBalanceByRate($rate);
+				Helper::updateUsersBalanceByDiff($diff);
 				Helper::updateSetting('last_inflation_date', Carbon::now());
 
 				return ['success' => true];
@@ -336,7 +350,7 @@ class AdminController extends Controller
 		if ($user && $user->hasRole('admin')) {
 			$userId = (int) $request->get('userId');
 			$amount = (int) $request->get('amount');
-
+			
 			if ($userId && $amount > 0) {
 				$user = User::where('role', 'user')->where('id', $userId)->first();
 				if ($user) {
@@ -374,7 +388,7 @@ class AdminController extends Controller
 				// Validator
 				$validator = Validator::make($request->all(), [
 					'in_fund' => 'required|boolean'
-					]);
+				]);
 
 				if ($validator->fails()) {
 					return [
