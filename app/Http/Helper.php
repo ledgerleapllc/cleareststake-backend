@@ -112,7 +112,7 @@ class Helper {
 	public static function updateBalance($balance) {
 		self::updateSetting('total_balance', $balance);
 	}
-
+	
 	// Update Users Balance By Diff
 	public static function updateUsersBalanceByDiff($diff) {
 		// We need to plus $diff
