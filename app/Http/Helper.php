@@ -54,8 +54,8 @@ class Helper {
 
 		$totalInFundBalance = User::where('id', '>', 0)
 			->where('role', '!=', 'admin')
-			->where('in_fund', '=', 1)->sum('balance');
-
+			->where('in_fund', '=', 1)
+			->sum('balance');
 		$settings['real_total_infund'] = $totalInFundBalance;
 
 		return $settings;
@@ -112,69 +112,13 @@ class Helper {
 	public static function updateBalance($balance) {
 		self::updateSetting('total_balance', $balance);
 	}
-	
-	// Update Users Balance By Diff
-	public static function updateUsersBalanceByDiff($diff) {
-		// We need to plus $diff
-		$users = User::where('role', 'user')->where('id', '>', 0)->get();
-		if ($users) {
-			// Calculate User Count
-			$count = 0;
-			foreach ($users as $user) {
-				$balance = 0;
-				if (isset($user->balance)) {
-					$balance = (int) $user->balance;
-				}
-				if ($balance > 0) {
-					$count++;
-				}
-			}
-
-			if ($count <= 0) {
-				return false;
-			}
-
-			$each = (int) ($diff / $count);
-			$rest = $diff - $each * $count;
-
-			foreach ($users as $user) {
-				$balance = 0;
-				if (isset($user->balance)) {
-					$balance = (int) $user->balance;
-				}
-
-				if ($balance > 0) {
-					$userDiff = $each;
-					if ($rest > 0) {
-						$userDiff++;
-						$rest--;
-					}
-
-					$user->balance = (int) $balance + $userDiff;
-					$user->save();
-
-					$user->last_inflation_date = $user->updated_at;
-					$user->save();
-
-					if ($userDiff != 0) {
-						self::addTransaction([
-			        		'user_id' => $user->id,
-			        		'amount' => $userDiff,
-			        		'action' => 'Inflation Deposit',
-			        		'balance' => $balance
-			      		]);
-			    	}
-			    }
-			}
-		}
-
-		return true;
-	}
 
 	// Update Users Balance By Rate
 	public static function updateUsersBalanceByRate($rate) {
+		if ($rate <= 1) return false;
+
 		$users = User::where('role', 'user')->where('id', '>', 0)->get();
-		
+
 		$sum = 0;
 		$settings = self::getSettings();
 		$balanceData = [];
@@ -201,20 +145,17 @@ class Helper {
 			}
 
 			$sumDiff = (int) ($sum - $sumTarget);
-			if ($sumDiff != 0) {
-				$isCalculated = false;
+			if ($sumDiff > 0) {
 				foreach ($users as $user) {
 					$key = 'user-' . $user->id;
 					$balance = (int) $balanceData[$key]['balance'];
-
-					if (!$isCalculated && $balance >= $sumDiff) {
-						$isCalculated = true;
-						$balanceData[$key]['balance'] = $balance - $sumDiff;
-					}
-
-					$balance = (int) $balanceData[$key]['balance'];
 					$obalance = (int) $balanceData[$key]['obalance'];
 					
+					if ($balance > 1 && $sumDiff > 0) {
+						$balance--;
+						$sumDiff--;
+					}
+
 					$diff = $balance - $obalance;
 
 					$user->balance = $balance;
@@ -222,8 +163,8 @@ class Helper {
 
 					$user->last_inflation_date = $user->updated_at;
 					$user->save();
-
-					if ($diff != 0) {
+					
+					if ($diff > 0) {
 						self::addTransaction([
 			        		'user_id' => $user->id,
 			        		'amount' => $diff,
@@ -234,7 +175,6 @@ class Helper {
 				}
 			}
 		}
-
 		return true;
 	}
 
