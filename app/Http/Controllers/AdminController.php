@@ -151,7 +151,7 @@ class AdminController extends Controller
 				$rate = (float) ($balance / $current_balance);
 				
 				Helper::updateBalance($balance);
-				Helper::updateUsersBalanceByRate($rate);
+				Helper::updateUsersBalanceByRate($rate, $balance);
 				Helper::updateSetting('last_inflation_date', Carbon::now());
 
 				return ['success' => true];
