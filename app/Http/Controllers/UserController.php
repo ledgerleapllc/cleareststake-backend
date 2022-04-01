@@ -59,7 +59,7 @@ class UserController extends Controller
 								->get();
 
 			if ($items && count($items)) {
-				$items = array_reverse($items);
+				// $items = array_reverse($items);
 				foreach ($items as $item) {
 					$name = Carbon::parse($item->created_at)->format("Y-m-d H:i");
 					$graphData[] = [
