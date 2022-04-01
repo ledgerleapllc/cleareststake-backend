@@ -46,7 +46,7 @@ class UserController extends Controller
 		$graphData = [];
 
 		if ($user && $user->hasRole('user')) {
-			$items = TokenPrice::where(function ($query) use ($startDate, $endDate) {
+			$query = TokenPrice::where(function ($query) use ($startDate, $endDate) {
 									if ($startDate) {
 										$query->where('created_at', '>=', $startDate);
 									}
@@ -54,9 +54,14 @@ class UserController extends Controller
 										$query->where('created_at', '<=', $endDate);
 									}
 								})
-								->orderBy('created_at', 'desc')
-								->limit(100)
-								->get();
+								->orderBy('created_at', 'desc');
+
+			$items = [];
+			if ($startDate || $endDate) {
+				$items = $query->get();
+			} else {
+				$items = $query->limit(90)->get();
+			}
 
 			if ($items && count($items)) {
 				for ($i = count($items) - 1; $i >= 0; $i--) {
