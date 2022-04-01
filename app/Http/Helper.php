@@ -86,7 +86,7 @@ class Helper {
 		$total = isset($settings['total_balance']) ? (int) $settings['total_balance'] : 0;
 		$total += (int) $balance;
 		self::updateSetting('total_balance', $total);
-		if($inFund == 1) {
+		if ($inFund == 1) {
 			$totalInFund = isset($settings['total_infund']) ? (int) $settings['total_infund'] : 0;
 			$totalInFund += (int) $balance;
 			self::updateSetting('total_infund', $totalInFund);
@@ -144,7 +144,7 @@ class Helper {
 			$sumDiff = (int) ($sumTarget - $sum);
 			if ($sumDiff >= 0) {
 				// $sumDiff should be always gte than 0
-				
+
 				$count = 0;
 				foreach ($users as $user) {
 					$key = 'user-' . $user->id;
@@ -300,7 +300,7 @@ class Helper {
 			'::1'
 		];
 
-		if(in_array($_SERVER['REMOTE_ADDR'], $whitelist)) return true;
+		if (in_array($_SERVER['REMOTE_ADDR'], $whitelist)) return true;
 		return false;
 	}
 }

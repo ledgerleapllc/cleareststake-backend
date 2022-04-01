@@ -32,11 +32,29 @@ class UserController extends Controller
 	 * @return array
 	 */
 	public function getGraphInfo(Request $request) {
+		$startDate = $request->get('startDate');
+		$endDate = $request->get('endDate');
+
+		if ($startDate) {
+			$startDate .= ' 00:00:00';
+		}
+		if ($endDate) {
+			$endDate .= ' 23:59:59';
+		}
+
 		$user = Auth::user();
 		$graphData = [];
 
 		if ($user && $user->hasRole('user')) {
-			$items = TokenPrice::orderBy('created_at', 'asc')->get();
+			$items = TokenPrice::where(function ($query) use ($startDate, $endDate) {
+									if ($startDate) {
+										$query->where('created_at', '>=', $startDate);
+									}
+									if ($endDate) {
+										$query->where('created_at', '<=', $endDate);
+									}
+								})
+								->orderBy('created_at', 'asc')->get();
 			if ($items && count($items)) {
 				foreach ($items as $item) {
 					$name = Carbon::parse($item->created_at)->format("Y-m-d H:i");
