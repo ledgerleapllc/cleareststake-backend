@@ -18,6 +18,7 @@ use App\Http\Helper;
 
 use App\User;
 use App\Log;
+use App\TokenPrice;
 
 use App\Mail\SubInvitation;
 
@@ -30,6 +31,43 @@ use Carbon\Carbon;
 
 class APIController extends Controller
 {
+  public function fixPriceData() {
+    $price = 0.11;
+    
+    $time = Carbon::createFromFormat('Y-m-d H:i:s', '2022-01-07 12:00:00', 'UTC');
+    $time->setTimezone('UTC');
+    $flag = true;
+
+    while ($flag == true) {
+      $record = TokenPrice::where('created_at', $time)->first();
+      
+      if ($record) {
+        // Record
+        DB::table('token_price')
+                          ->where('id', $record->id)
+                          ->update([
+                            'price' => $price,
+                            'created_at' => $time,
+                            'updated_at' => $time,
+                          ]);
+      } else {
+        // No Record
+        DB::table('token_price')->insert([
+                              'price' => $price,
+                              'created_at' => $time,
+                              'updated_at' => $time,
+                            ]);
+      }
+
+      $time->addHour();
+      if ($time == '2022-03-29 21:00:00') {
+        $flag = false;
+      }
+    }
+
+    echo 'done';
+  }
+
   /**
    * Gets user global of the person logged in
    * @return array
