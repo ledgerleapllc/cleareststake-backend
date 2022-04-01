@@ -54,8 +54,12 @@ class UserController extends Controller
 										$query->where('created_at', '<=', $endDate);
 									}
 								})
-								->orderBy('created_at', 'asc')->get();
+								->orderBy('created_at', 'desc')
+								->limit(168)
+								->get();
+
 			if ($items && count($items)) {
+				$items = array_reverse($items);
 				foreach ($items as $item) {
 					$name = Carbon::parse($item->created_at)->format("Y-m-d H:i");
 					$graphData[] = [
