@@ -147,13 +147,11 @@ class AdminController extends Controller
 						'message' => 'New balance should be greater than current balance',
 					];
 				}
-
+				
 				$rate = (float) ($balance / $current_balance);
-				$diff = $balance - $current_balance;
 				
 				Helper::updateBalance($balance);
-				// Helper::updateUsersBalanceByRate($rate);
-				Helper::updateUsersBalanceByDiff($diff);
+				Helper::updateUsersBalanceByRate($rate, $balance);
 				Helper::updateSetting('last_inflation_date', Carbon::now());
 
 				return ['success' => true];
@@ -209,13 +207,13 @@ class AdminController extends Controller
 				$sort_direction = trim($sort_direction);
 				
 				$total = Transaction::has('user')
-													->where('user_id', $user->id)
-													->get()
-													->count();
+									->where('user_id', $user->id)
+									->get()
+									->count();
 				$transactions = Transaction::has('user')
-																	->where('user_id', $user->id)
-																	->orderBy($sort_key, $sort_direction)
-																	->get();
+											->where('user_id', $user->id)
+											->orderBy($sort_key, $sort_direction)
+											->get();
 				$settings = Helper::getSettings();
 				$tokenPrice = $settings['token_price'];
 				foreach ($transactions as $trans) {

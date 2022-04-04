@@ -14,8 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/invitation/{code}', 'APIController@getInvitationData');
+// Route::get('/fix-price-data', 'APIController@fixPriceData');
 
+Route::get('/invitation/{code}', 'APIController@getInvitationData');
 Route::put('/invitation', 'APIController@finishInvitation');
 
 Route::post('/login', 'APIController@login')->name('login');

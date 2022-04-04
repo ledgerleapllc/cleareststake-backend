@@ -55,7 +55,7 @@ class TokenPrice extends Command
                 $tokenPrice = new TokenPriceModel;
                 $tokenPrice->price = $price;
                 $tokenPrice->save();
-
+                
                 // $limit = 48 * 7;
                 // $count = TokenPriceModel::where('id', '>', 0)
                 //                         ->get()
